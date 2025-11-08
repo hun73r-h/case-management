@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Signup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+      background-size: 300% 300%;
+      animation: bgMove 12s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .glass-box {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 45px 35px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+      color: white;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .glass-box h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #fff;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.25);
+      border: none;
+      color: #fff;
+      font-size: 0.95rem;
+      padding: 0.8rem;
+      border-radius: 10px;
+    }
+
+    .form-control::placeholder {
+      color: #eee;
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.3);
+      color: #fff;
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background-color: #fff;
+      color: #3a1c71;
+      font-weight: bold;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #f2f2f2;
+      transform: scale(1.02);
+    }
+
+    .form-text a {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    .form-text a:hover {
+      color: #ffeeba;
+    }
+
+    .alert {
+      font-size: 0.9rem;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+    }
+
+    .btn-close {
+      filter: brightness(0) invert(1);
+    }
+  </style>
+</head>
+<body>
+  <div class="glass-box">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'danger' else category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h2><i class="fas fa-user-plus me-2"></i>Register</h2>
+    <form method="POST">
+      <div class="mb-3">
+        <input type="text" name="full_name" class="form-control" placeholder="Full Name" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" name="username" class="form-control" placeholder="Username" required>
+      </div>
+      <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
+      </div>
+      <div class="mb-3">
+        <input type="text" name="phone" class="form-control" placeholder="Phone" required>
+      </div>
+      <div class="mb-3">
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+    </form>
+    <p class="form-text mt-4 text-center">
+      Already have an account? <a href="{{ url_for('login') }}">Login</a><br/>
+      <a href="{{ url_for('welcome') }}" class="d-block mt-2">⬅ Go to Main Page</a>
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

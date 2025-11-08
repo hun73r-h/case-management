@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Management Dashboard</title>
+
+  <!-- Bootstrap, Toastr, SweetAlert2, and Animate.css -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #121212;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    header, footer {
+      background: #1e1e1e;
+      color: #fff;
+    }
+    .glass-form {
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 30px;
+      color: #fff;
+      backdrop-filter: blur(12px);
+    }
+    .form-select {
+      background-color: rgba(255, 255, 255, 0.07);
+      color: #fff;
+      border: none;
+    }
+    .form-select option {
+      background-color: #1e1e1e;
+      color: #f1f1f1;
+    }
+    .card {
+      background: rgba(40, 40, 40, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      box-shadow: 0 6px 16px rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    .form-control, .form-select {
+      background: rgba(255, 255, 255, 0.07);
+      color: #fff;
+      border: none;
+    }
+    .form-control::placeholder {
+      color: #aaa;
+    }
+    .form-control:focus, .form-select:focus {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      box-shadow: none;
+    }
+    .btn-success, .btn-outline-primary, .btn-outline-danger, .btn-warning, .btn-outline-success, .btn-danger {
+      font-weight: 600;
+    }
+    .btn-outline-primary:hover {
+      background-color: #0d6efd;
+      color: #fff;
+    }
+    .btn-outline-danger:hover {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .btn-outline-success:hover {
+      background-color: #198754;
+      color: #fff;
+    }
+    .card-footer {
+      background: transparent;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    hr {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    #loadingIndicator {
+      color: #aaa;
+      font-style: italic;
+    }
+    .swal2-confirm-custom {
+      background-image: linear-gradient(to right, #ff416c, #ff4b2b);
+      border: none !important;
+      color: #fff !important;
+      font-weight: bold;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .swal2-confirm-custom:hover {
+      background-image: linear-gradient(to right, #ff4b2b, #ff416c);
+      transform: scale(1.05);
+    }
+    .swal2-cancel-custom {
+      background-color: #444 !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.6rem 1.2rem;
+    }
+    .swal2-cancel-custom:hover {
+      background-color: #666 !important;
+    }
+  </style>
+</head>
+<body>
+  <header class="p-3">
+    <div class="container d-flex justify-content-between align-items-center">
+      <h3 class="m-0">📂 Case Management</h3>
+      <span>Welcome, {{ session.user if session.get('user') else session.admin }} |
+        <a href="/logout" class="text-warning">Logout</a></span>
+    </div>
+  </header>
+
+  <div class="container my-4">
+    <h4 class="mb-3">➕ Add New Case</h4>
+    <form method="POST" action="/add" class="row g-3 p-3 glass-form">
+      <div class="col-md-6">
+        <label for="case_no" class="form-label">Case No.</label>
+        <input type="text" id="case_no" name="case_no" class="form-control" placeholder="Case No." required>
+      </div>
+      <div class="col-md-6">
+        <label for="po_no" class="form-label">PO No.</label>
+        <input type="text" id="po_no" name="po_no" class="form-control" placeholder="PO No.">
+      </div>
+      <div class="col-md-6">
+        <label for="r_note_no" class="form-label">R Note No.</label>
+        <input type="text" id="r_note_no" name="r_note_no" class="form-control" placeholder="R Note No.">
+      </div>
+      <div class="col-md-6">
+        <label for="subject" class="form-label">Subject</label>
+        <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject">
+      </div>
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+      </div>
+      <div class="col-md-6">
+        <label for="sent_to" class="form-label">Sent To</label>
+        <input type="text" id="sent_to" name="sent_to" class="form-control" placeholder="Sent To" required>
+      </div>
+      <div class="col-md-6">
+        <label for="co6_date" class="form-label">📅 CO6 Date</label>
+        <input type="date" id="co6_date" name="co6_date" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label for="sent_date" class="form-label">📤 Sent Date</label>
+        <input type="date" id="sent_date" name="sent_date" class="form-control" required>
+      </div>
+      <!-- Hidden Field for No. of Days with Accounts -->
+      <input type="hidden" id="no_of_days_with_accounts" name="no_of_days_with_accounts">
+      <div class="col-12 d-grid mt-2">
+        <button type="submit" class="btn btn-success">➕ Add Case</button>
+      </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <div class="d-flex justify-content-between flex-wrap align-items-center mb-3">
+      <input type="text" id="search" class="form-control w-50" placeholder="🔍 Search..." onkeyup="filterCards()" />
+      <form method="get" action="/" class="ms-3">
+        <select name="filter_days" class="form-select" onchange="this.form.submit()">
+          <option value="" {% if not filter_days or filter_days == '' %}selected{% endif %}>📅 Show All</option>
+          <option value="7" {% if filter_days == '7' %}selected{% endif %}>Last 7 Days</option>
+          <option value="30" {% if filter_days == '30' %}selected{% endif %}>Last 30 Days</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="mb-3">
+      <a href="/export/excel" class="btn btn-outline-primary me-2" onclick="showLoading()">⬇ Export to Excel</a>
+      <a href="/export/pdf" class="btn btn-outline-danger" onclick="showLoading()">⬇ Export to PDF</a>
+      <span id="loadingIndicator" class="ms-3 d-none">Loading...</span>
+    </div>
+
+    <div id="cards-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for case in cases %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+  <h5 class="card-title">📁 Case No: {{ case.case_no }}</h5>
+  {% if case.po_no %}<p><strong>PO No:</strong> {{ case.po_no }}</p>{% endif %}
+  {% if case.r_note_no %}<p><strong>R Note No:</strong> {{ case.r_note_no }}</p>{% endif %}
+  {% if case.subject %}<p><strong>Subject:</strong> {{ case.subject }}</p>{% endif %}
+  <p><strong>Name:</strong> {{ case.name }}</p>
+  <p><strong>Sent To:</strong> {{ case.sent_to }}</p>
+  {% if case.co6_date %}<p><strong>📅 CO6 Date:</strong> {{ case.co6_date.strftime('%d-%m-%Y') }}</p>{% endif %}
+  <p><strong>📤 Sent Date:</strong> {{ case.sent_date.strftime('%d-%m-%Y') }}</p>
+
+  {% if case.no_of_days_with_accounts %}
+    <p><strong>🏬 No. of Days with Accounts:</strong> {{ case.no_of_days_with_accounts }}</p>
+  {% endif %}
+
+  <p>
+    <strong>🏢 No. of Days with Stores:</strong>
+    {{ case.no_of_days_with_stores if case.no_of_days_with_stores else '___' }}
+  </p>
+
+  {% if case.default_date %}
+    <p><strong>🗓 Default Date:</strong> {{ case.default_date.strftime('%d-%m-%Y') }}</p>
+  {% endif %}
+
+  {% if case.received %}
+    <p class="text-success fw-bold fs-6">✅
+      <span style="color:#6de36d; font-weight:bold;">
+        Received on {{ case.received_date.strftime('%d-%m-%Y %I:%M %p') }}
+      </span>
+    </p>
+  {% else %}
+    <p><a href="/received/{{ case.id }}" class="btn btn-outline-success btn-sm">Mark as Received</a></p>
+  {% endif %}
+</div>
+
+          <div class="card-footer d-flex justify-content-between">
+            <a href="/edit/{{ case.id }}" class="btn btn-warning btn-sm">✏ Edit</a>
+            {% if session.get('admin') %}
+            <form method="POST" action="/delete/{{ case.id }}" onsubmit="return confirmDelete(event)">
+              <button class="btn btn-danger btn-sm">🗑 Delete</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <footer class="footer text-center py-3">
+    &copy; 2025 Case Management System
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        toastr.{{ 'error' if category == 'danger' else category }}("{{ message }}");
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    function confirmDelete(event) {
+      event.preventDefault();
+      Swal.fire({
+        title: '🗑️ Confirm Deletion',
+        text: "Are you sure you want to delete this case? This action cannot be undone.",
+        icon: 'warning',
+        background: '#1e1e1e',
+        color: '#f1f1f1',
+        showCancelButton: true,
+        confirmButtonText: '🔥 Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        customClass: {
+          popup: 'animate__animated animate__fadeInDown',
+          confirmButton: 'swal2-confirm-custom',
+          cancelButton: 'swal2-cancel-custom'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          event.target.submit();
+        }
+      });
+    }
+
+    function filterCards() {
+      let input = document.getElementById("search").value.toLowerCase();
+      document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(input) ? "block" : "none";
+      });
+    }
+
+    function showLoading() {
+      document.getElementById("loadingIndicator").classList.remove("d-none");
+    }
+  </script>
+</body>
+</html>

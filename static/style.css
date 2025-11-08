@@ -1,0 +1,82 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #343a40;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+footer {
+  background-color: #343a40;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.card-body p {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+#search {
+  max-width: 300px;
+}
+
+#loadingIndicator {
+  font-style: italic;
+}
+
+/* Toast top spacing */
+#toast-container {
+  top: 70px !important;
+}
+
+/* SweetAlert custom button spacing */
+.swal2-popup .swal2-actions button {
+  margin: 0 5px;
+}
+
+/* Adjust spacing in form-section and cards */
+form input, form select {
+  margin-bottom: 10px;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-footer {
+  background-color: #f0f0f0;
+  border-top: 1px solid #ddd;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}

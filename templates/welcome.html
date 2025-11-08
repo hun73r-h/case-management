@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff6ec4, #7873f5, #4a00e0, #00c9ff);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .wrapper {
+      display: flex;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      max-width: 1000px;
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .left, .right {
+      flex: 1;
+      padding: 2rem;
+      color: #fff;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .left h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .left p {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      color: #f5f5f5;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn-user-login {
+      background-color: #ffffff;
+      color: #4a00e0;
+    }
+
+    .btn-user-login:hover {
+      background-color: #f2f2f2;
+      transform: translateY(-2px);
+    }
+
+    .btn-user-signup {
+      background-color: #ffc107;
+      color: #000;
+    }
+
+    .btn-user-signup:hover {
+      background-color: #e0a800;
+      transform: translateY(-2px);
+    }
+
+    .btn-admin-login {
+      background-color: #dc3545;
+      color: #fff;
+    }
+
+    .btn-admin-login:hover {
+      background-color: #b02a37;
+      transform: translateY(-2px);
+    }
+
+    .btn-admin-signup {
+      background-color: #20c997;
+      color: #fff;
+    }
+
+    .btn-admin-signup:hover {
+      background-color: #198754;
+      transform: translateY(-2px);
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+    }
+
+    .avatar svg {
+      width: 80px;
+      height: 80px;
+      fill: #888;
+    }
+
+    .right p {
+      font-size: 1.1rem;
+      color: #f0f0f0;
+      max-width: 280px;
+    }
+
+    @media (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+        text-align: center;
+      }
+      .right {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="left">
+      <h1>👋 Welcome to Case Management</h1>
+      <p>Please choose how you'd like to continue:</p>
+      <form>
+        <button type="button" class="btn btn-user-login" onclick="location.href='{{ url_for('login') }}'">User Login</button>
+        <button type="button" class="btn btn-user-signup" onclick="location.href='{{ url_for('signup') }}'">User Signup</button>
+        <button type="button" class="btn btn-admin-login" onclick="location.href='{{ url_for('admin_login') }}'">Admin Login</button>
+        <button type="button" class="btn btn-admin-signup" onclick="location.href='{{ url_for('admin_signup') }}'">Admin Signup</button>
+      </form>
+    </div>
+    <div class="right">
+      <div class="avatar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+          <circle cx="32" cy="20" r="12"/>
+          <path d="M8 56c0-13 48-13 48 0H8z"/>
+        </svg>
+      </div>
+      <p>“Your efficiency begins with smart case handling.”</p>
+    </div>
+  </div>
+</body>
+</html>
